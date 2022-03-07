@@ -89,19 +89,19 @@ namespace WikiPersonCalendar
                         Person p = new Person();
                         if (tmp.InnerText.Contains("B.C."))
                         {
-                            p.BirthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("B.C.",""));
+                            p.birthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("B.C.",""));
                         }
                         else if (!tmp.InnerText.Contains("生年不明")) 
                         {
-                            p.BirthYear = Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")));
+                            p.birthYear = Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")));
                         }
-                        if ((dateTimePicker2.Value.Year - p.BirthYear) % 10 == 0)
+                        if ((dateTimePicker2.Value.Year - p.birthYear) % 10 == 0)
                         {
                             if (tmp.InnerText.Contains("、")) {
-                                p.Name = tmp.InnerText.Substring(tmp.InnerText.IndexOf("-") + 1, tmp.InnerText.IndexOf("、") - tmp.InnerText.IndexOf("-") - 1);
-                                p.Name = reg.Replace(p.Name, "");
+                                p.name = tmp.InnerText.Substring(tmp.InnerText.IndexOf("-") + 1, tmp.InnerText.IndexOf("、") - tmp.InnerText.IndexOf("-") - 1);
+                                p.name = reg.Replace(p.name, "");
                                 Personlist.Add(p);
-                                Tani_str += p.Name + "　生誕" + (dateTimePicker2.Value.Year - p.BirthYear).ToString() + "年" + "\r\n";
+                                Tani_str += p.name + "　生誕" + (dateTimePicker2.Value.Year - p.birthYear).ToString() + "年" + "\r\n";
 
                             }
                         }
@@ -124,20 +124,8 @@ namespace WikiPersonCalendar
 
         private class Person
         {
-            public int BirthYear;
-            public string Name;       
-        }
-
-
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-
+            public int birthYear;
+            public string name;       
         }
 
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
