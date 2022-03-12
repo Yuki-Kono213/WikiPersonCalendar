@@ -80,6 +80,7 @@ namespace WikiPersonCalendar
                 Regex reg = new Regex("&..*;");
                 foreach (var tmp in Tani_Collection)
                 {
+                    //忌日になったらデータ収集停止
                     if (tmp.InnerText.Contains("忌日[編集]"))
                     {
                         BirthFalg = false;
@@ -106,6 +107,7 @@ namespace WikiPersonCalendar
                             }
                         }
                     }
+                    //誕生日のコーナーに来たらデータ収集開始
                     if (tmp.InnerText.Contains("誕生日[編集]"))
                     {
                         BirthFalg = true;
