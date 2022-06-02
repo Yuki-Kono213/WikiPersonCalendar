@@ -81,16 +81,21 @@ namespace WikiPersonCalendar
                 foreach (var tmp in Tani_Collection)
                 {
                     //忌日になったらデータ収集停止
-                    if (tmp.InnerText.Contains("忌日[編集]"))
+                    if (tmp.InnerHtml.Contains("id=\"忌日\""))
                     {
                         BirthFalg = false;
                     }
-                    if (BirthFalg)
+                    if (BirthFalg && !tmp.InnerHtml.Contains("class=\"thumb tright\""))
                     {
+                        string a = tmp.InnerHtml;
                         Person p = new Person();
-                        if (tmp.InnerText.Contains("B.C."))
+                        if (tmp.InnerText.Contains("B.C.") )
                         {
                             p.birthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("B.C.",""));
+                        }
+                        else if (tmp.InnerText.Contains("紀元前"))
+                        {
+                            p.birthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("紀元前", ""));
                         }
                         else if (!tmp.InnerText.Contains("生年不明")) 
                         {
@@ -107,8 +112,12 @@ namespace WikiPersonCalendar
                             }
                         }
                     }
+                    else if(BirthFalg)
+                    {
+                        string a = tmp.InnerHtml;
+                    }
                     //誕生日のコーナーに来たらデータ収集開始
-                    if (tmp.InnerText.Contains("誕生日[編集]"))
+                    if (tmp.InnerHtml.Contains("id=\"誕生日\""))
                     {
                         BirthFalg = true;
                     }
