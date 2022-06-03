@@ -39,7 +39,7 @@ namespace WikiPersonCalendar
 
 
         }
-
+        string t = "";
         public void DisplayDayPerson()
         {
             string str = "https://ja.wikipedia.org/wiki/" + Convert.ToInt32(dateTimePicker2.Value.ToString("MM")).ToString()
@@ -81,27 +81,29 @@ namespace WikiPersonCalendar
                 foreach (var tmp in Tani_Collection)
                 {
                     //忌日になったらデータ収集停止
-                    if (tmp.InnerHtml.Contains("id=\"忌日\""))
+                    if (tmp.InnerHtml.Contains("id=\"忌日\"")|| tmp.InnerHtml.Contains("id=\"命日\""))
                     {
                         BirthFalg = false;
+                        break;
                     }
-                    if (BirthFalg && !tmp.InnerHtml.Contains("class=\"thumb tright\""))
+
+                    if (BirthFalg && !tmp.InnerHtml.Contains("thumb") && tmp.InnerText != "")
                     {
-                        string a = tmp.InnerHtml;
                         Person p = new Person();
+                        t = tmp.InnerHtml;
                         if (tmp.InnerText.Contains("B.C.") )
                         {
                             p.birthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("B.C.",""));
                         }
-                        else if (tmp.InnerText.Contains("紀元前"))
+                        else if (tmp.InnerText.Contains("紀元前") && !tmp.InnerText.Contains("世紀"))
                         {
                             p.birthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("紀元前", ""));
                         }
-                        else if (!tmp.InnerText.Contains("生年不明")) 
+                        else if (!tmp.InnerText.Contains("不詳") && !tmp.InnerText.Contains("非公開") && !tmp.InnerText.Contains("生年") && !tmp.InnerText.Contains("世紀") && Int32.TryParse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")), out int a)) 
                         {
-                            p.birthYear = Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")));
+                            p.birthYear = a;
                         }
-                        if ((dateTimePicker2.Value.Year - p.birthYear) % 10 == 0)
+                        if (p.birthYear != 10000 && (dateTimePicker2.Value.Year - p.birthYear) % 10 == 0)
                         {
                             if (tmp.InnerText.Contains("、")) {
                                 p.name = tmp.InnerText.Substring(tmp.InnerText.IndexOf("-") + 1, tmp.InnerText.IndexOf("、") - tmp.InnerText.IndexOf("-") - 1);
@@ -111,10 +113,6 @@ namespace WikiPersonCalendar
 
                             }
                         }
-                    }
-                    else if(BirthFalg)
-                    {
-                        string a = tmp.InnerHtml;
                     }
                     //誕生日のコーナーに来たらデータ収集開始
                     if (tmp.InnerHtml.Contains("id=\"誕生日\""))
@@ -129,14 +127,19 @@ namespace WikiPersonCalendar
             }
             catch (Exception ex)
             {
-                textBox1.Text += Tani_str;
+                textBox1.Text += t;
             }
         }
 
         private class Person
         {
             public int birthYear;
-            public string name;       
+            public string name;  
+            
+            public Person()
+            {
+                birthYear = 10000;
+            }
         }
 
         private void dateTimePicker2_ValueChanged(object sender, EventArgs e)
