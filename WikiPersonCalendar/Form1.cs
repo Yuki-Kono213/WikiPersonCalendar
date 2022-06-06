@@ -99,7 +99,7 @@ namespace WikiPersonCalendar
                         {
                             p.birthYear = -Int32.Parse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")).Replace("紀元前", ""));
                         }
-                        else if (!tmp.InnerText.Contains("不詳") && !tmp.InnerText.Contains("非公開") && !tmp.InnerText.Contains("生年") && !tmp.InnerText.Contains("世紀") && Int32.TryParse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")), out int a)) 
+                        else if (!tmp.InnerText.Contains("不詳") && !tmp.InnerText.Contains("非公") && !tmp.InnerText.Contains("生年") && !tmp.InnerText.Contains("世紀") && Int32.TryParse(tmp.InnerText.Substring(0, tmp.InnerText.IndexOf("年")), out int a)) 
                         {
                             p.birthYear = a;
                         }
